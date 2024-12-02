@@ -10,7 +10,19 @@ fn create_tmp_home() !string {
 	return home_dir_path
 }
 
+fn resolve_sandbox() string {
+	return "sandboxhome"
+}
+
+fn resolve_dot_prefix(s string) string {
+	return s.replace("dot_", ".")
+}
+
 fn main() {
 	tmp_home := create_tmp_home()!
 	defer { os.rmdir(tmp_home) or { panic(err) } }
+
+	os.walk(resolve_sandbox(), fn (p string) {
+		println(resolve_dot_prefix(p))
+	})
 }
